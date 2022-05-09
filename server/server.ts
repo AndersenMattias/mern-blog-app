@@ -3,6 +3,7 @@ import path from 'path'
 import cors from 'cors'
 import 'dotenv/config'
 import memoryRoutes from './routes/memory.routes'
+import userRoutes from './routes/user.routes'
 
 import { connect } from './database';
 
@@ -22,9 +23,11 @@ app.use(express.static(buildPath));
 
 // middlewares
 app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
 // Routes
 app.use('/api/', memoryRoutes);
+app.use('/api/', userRoutes);
 
 
 (async () => {
