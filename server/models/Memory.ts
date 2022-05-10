@@ -3,20 +3,19 @@ import { Schema, model, Document } from "mongoose";
 
 export interface IMemory extends Document {
     title: string;
-    image: string;
+    imageUrl: string;
     description: string;
     year: number;
     location: string;
 }
 
-const MemorySchema  = new Schema<IMemory>(
+const memorySchema  = new Schema<IMemory>(
     {
         title: {
             type: String,
             required: true
         },
-        image: {
-            data: Buffer,
+        imageUrl: {           
             type: String,
         },
         description: {
@@ -36,4 +35,4 @@ const MemorySchema  = new Schema<IMemory>(
     {timestamps: true}
 );
 
-export default model<IMemory>('Memory', MemorySchema)
+export default model<IMemory>('Memory', memorySchema)

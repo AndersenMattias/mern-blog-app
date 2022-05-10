@@ -4,7 +4,7 @@ import Memory from "./Memory";
 export interface IUser extends Document {
     email: string;
     password: number | string;
-    images: any
+    imageUrl: string;
 
 }
 
@@ -22,8 +22,8 @@ const userSchema = new Schema<IUser>({
         minlength: 7,
         trim: true,
     },
-    images: {
-        type: Buffer
+    imageUrl: {
+        type: String
     },
     
 },
