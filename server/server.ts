@@ -2,8 +2,8 @@ import express from 'express'
 import path from 'path'
 import cors from 'cors'
 import 'dotenv/config'
-import memoryRoutes from './routes/memory.routes'
-import userRoutes from './routes/user.routes'
+import memoryRoutes from './routes/memory'
+import userRoutes from './routes/user'
 
 import { connect } from './database';
 
@@ -12,9 +12,6 @@ const app = express();
 
 // Settings
 app.set('port', process.env.PORT ||5000)
-
-
-
 
 app.use(cors());
 
