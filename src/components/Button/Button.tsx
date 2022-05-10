@@ -5,7 +5,7 @@ enum ButtonTypes {
 }
 interface IButtonProps   {
     text: string;
-    type: ButtonTypes | undefined;
+    type?: ButtonTypes | undefined;
     onClick(): void;
     btnStyle: string;
 }

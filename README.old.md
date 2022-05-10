@@ -1,1 +1,1 @@
-# mern-travel-app
+# mern-experiences-app

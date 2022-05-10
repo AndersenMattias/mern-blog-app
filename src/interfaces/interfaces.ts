@@ -1,10 +1,11 @@
-export interface MemoryProps {
-    id: string;
-    title: string;
-    imageUrl: string;
-    description: string;
-    year: number;
+export interface ILocationProps {
+  id: string;
+  title: string;
+  imageUrl: string;
+  description: string;
+  year: number;
 }
 
-export interface Memories {
+export interface Props {
+  fetchData?: ILocationProps[];
 }

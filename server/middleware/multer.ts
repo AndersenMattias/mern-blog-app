@@ -1,6 +1,7 @@
 import aws from 'aws-sdk'
 import multer from "multer";
 import multerS3 from 'multer-s3'
+import { v4 as uuid } from 'uuid';
 
 
 const s3 = new aws.S3({
@@ -18,7 +19,7 @@ multer({
       cb(null, { fieldName: file.fieldname });
     },
     key: function (req, file, cb) {
-      cb(null, `image-${Date.now()}.jpeg`);
+      cb(null, `image-${uuid()}.jpeg`);
     },
   }),
 });
