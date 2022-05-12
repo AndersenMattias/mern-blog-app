@@ -1,11 +1,16 @@
-export interface ILocationProps {
-  id: string;
-  title: string;
+export interface ILocation {
+  _id: string;
+  locationName: string;
   imageUrl: string;
   description: string;
-  year: number;
+  date: Date;
+  createdBy: string;
 }
 
 export interface Props {
-  fetchData?: ILocationProps[];
+  fetchData?: ILocation[];
+}
+
+export interface ISignIn {
+  toggleLogin: () => boolean | undefined | void;
 }

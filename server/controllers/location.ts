@@ -5,16 +5,17 @@ export const createLocation = async (
   req: Request | any,
   res: Response
 ): Promise<Response> => {
-  const { title, description, year, place } = req.body;
+  const { locationName, description, date, createdBy, rating } = req.body;
   const uploadedImg = req.file.location;
   console.log(uploadedImg);
 
   const location = new Location({
-    title,
+    locationName,
     imageUrl: uploadedImg,
     description,
-    year,
-    place,
+    date,
+    createdBy,
+    rating,
   });
 
   try {

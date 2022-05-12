@@ -8,17 +8,18 @@ import NavigationBar from 'components/NavigationBar/NavigationBar';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from 'components/Home/Home';
-import { ILocationProps } from 'interfaces/interfaces';
+import { ILocation } from 'interfaces/interfaces';
+import LocationDetails from 'components/LocationDetails/LocationDetails';
 
 function App() {
-  const [fetchData, setFetchData] = useState<ILocationProps[]>([]);
+  const [fetchData, setFetchData] = useState<ILocation[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const resp = await MEMORY.getMemories();
         const data = await resp.json();
-        setFetchData(data.memories);
+        setFetchData(data.locations);
       } catch (e) {
         console.log(e);
       }
@@ -32,7 +33,8 @@ function App() {
       <Router>
         <NavigationBar />
         <Routes>
-          <Route path='/' element={<Home fetchData={fetchData} />}></Route>
+          <Route path='/' element={<Home fetchData={fetchData} />} />
+          <Route path='/location-details/:id' element={<LocationDetails />} />
         </Routes>
       </Router>
     </>

@@ -1,11 +1,16 @@
+import AddLocation from 'components/AddLocation/AddLocation';
 import LocationList from 'components/LocationList/LocationList';
-import { ILocationProps, Props } from 'interfaces/interfaces';
+import { Props } from 'interfaces/interfaces';
+import { Container } from 'react-bootstrap';
 
 const Home = ({ fetchData }: Props): JSX.Element => {
   return (
-    <div>
+    <Container>
+      <h2>Sign in or register to share your experiences.</h2>
       <LocationList fetchData={fetchData} />
-    </div>
+
+      <AddLocation />
+    </Container>
   );
 };
 

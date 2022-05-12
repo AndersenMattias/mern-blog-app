@@ -1,24 +1,22 @@
-import { ILocationProps, Props } from 'interfaces/interfaces';
+import { ILocation, Props } from 'interfaces/interfaces';
+import { Container } from 'react-bootstrap';
 
 const Location = ({ fetchData }: Props): JSX.Element => {
   console.log(fetchData);
   return (
-    <>
-      {fetchData?.map((location: ILocationProps) => {
+    <Container fluid>
+      {fetchData?.map((location: ILocation) => {
+        console.log(location);
         return (
-          <div key={location.id}>
-            <h2>{location.title}</h2>
-            <img
-              src={location.imageUrl}
-              alt='eriks favorit soffa'
-              width={200}
-              height={200}
-            />
-            <p>{location.description}</p>
-          </div>
+          <Container key={location._id} fluid>
+            <h2>{location.locationName}</h2>
+            <img src={location.imageUrl} alt='image' width={200} height={200} />
+            <p>Description: {location.description}</p>
+            <p>Visited: {location.date.toString().split('T')[0]}</p>
+          </Container>
         );
       })}
-    </>
+    </Container>
   );
 };
 

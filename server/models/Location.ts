@@ -1,33 +1,38 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface ILocation extends Document {
-  title: string;
+  locationName: string;
   imageUrl: string;
   description: string;
-  year: number;
-  place: string;
+  date: Date;
+  createdBy: string;
+  rating: number;
 }
 
 const locationSchema = new Schema<ILocation>(
   {
-    title: {
+    locationName: {
       type: String,
-      required: true,
+      required: [true, 'What is the name of the location?'],
     },
     imageUrl: {
       type: String,
     },
     description: {
       type: String,
+      required: [true, 'Please describe the location and experience.'],
+      maxlength: 150,
+    },
+    date: {
+      type: Date,
       required: true,
     },
-    year: {
-      type: Number,
-      required: true,
-    },
-    place: {
+    createdBy: {
       type: String,
-      required: true,
+      required: [true, 'Which user is uploading this?'],
+    },
+    rating: {
+      type: Number,
     },
   },
   { timestamps: true }

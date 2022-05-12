@@ -1,13 +1,14 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import IUser from '../interfaces/user';
 
-export interface IUser extends Document {
-  email: string;
-  password: number | string;
-  imageUrl: string;
-}
+import bcryptjs from 'bcryptjs';
 
-const userSchema = new Schema<IUser>(
+const UserSchema = new Schema<IUser>(
   {
+    username: {
+      type: String,
+      unique: true,
+    },
     email: {
       type: String,
       unique: true,
@@ -21,17 +22,33 @@ const userSchema = new Schema<IUser>(
       minlength: 7,
       trim: true,
     },
-    imageUrl: {
-      type: String,
-    },
+    tokens: [
+      {
+        token: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-userSchema.virtual('locations', {
+UserSchema.virtual('locations', {
   ref: 'Location',
   localField: '_id',
   foreignField: 'owner',
 });
 
-export default model<IUser>('User', userSchema);
+// Hash the plain text password before saving
+UserSchema.pre('save', async function (next) {
+  const user = this;
+
+  if (user.isModified('password')) {
+    user.password = await Promise.resolve(bcryptjs.hash(user.password, 8));
+  }
+
+  next();
+});
+
+export default model<IUser>('User', UserSchema);
