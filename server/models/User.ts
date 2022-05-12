@@ -1,39 +1,37 @@
-import { Schema, model, Document } from "mongoose";
-import Memory from "./Memory";
+import { Schema, model, Document } from 'mongoose';
 
 export interface IUser extends Document {
-    email: string;
-    password: number | string;
-    imageUrl: string;
-
+  email: string;
+  password: number | string;
+  imageUrl: string;
 }
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<IUser>(
+  {
     email: {
-        type: String,
-        unique: true,
-        required: true,
-        trim: true,
-        lowercase: true,
+      type: String,
+      unique: true,
+      required: true,
+      trim: true,
+      lowercase: true,
     },
     password: {
-        type: String,
-        required: true,
-        minlength: 7,
-        trim: true,
+      type: String,
+      required: true,
+      minlength: 7,
+      trim: true,
     },
     imageUrl: {
-        type: String
+      type: String,
     },
-    
-},
-    {timestamps: true}
-)
+  },
+  { timestamps: true }
+);
 
-userSchema.virtual('memories', {
-    ref: 'Memory',
-    localField: '_id',
-    foreignField: 'owner'
-})
+userSchema.virtual('locations', {
+  ref: 'Location',
+  localField: '_id',
+  foreignField: 'owner',
+});
 
-export default model<IUser>('User', userSchema)
+export default model<IUser>('User', userSchema);
