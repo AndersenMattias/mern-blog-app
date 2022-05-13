@@ -1,17 +1,18 @@
 export interface ILocation {
   _id: string;
+  title: string;
   locationName: string;
   country: string;
   city: string;
   description: string;
   date: Date;
-  photos: string[];
+  image: string;
   createdBy: string;
   rating: number;
 }
 
 export interface Props {
-  fetchData?: ILocation[];
+  fetchData: ILocation[];
 }
 
 export interface ISignIn {

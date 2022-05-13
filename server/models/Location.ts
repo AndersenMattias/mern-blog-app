@@ -1,41 +1,56 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface ILocation extends Document {
+interface ILocation extends Document {
+  title: string;
   locationName: string;
-  imageUrl: string;
+  country: string;
+  city: string;
   description: string;
   date: Date;
+  image: string;
   createdBy: string;
   rating: number;
 }
 
-const locationSchema = new Schema<ILocation>(
+const LocationSchema = new Schema<ILocation>(
   {
+    title: {
+      type: String,
+      required: true,
+    },
     locationName: {
       type: String,
-      required: [true, 'What is the name of the location?'],
+      required: true,
     },
-    imageUrl: {
+    country: {
+      type: String,
+    },
+    city: {
       type: String,
     },
     description: {
       type: String,
-      required: [true, 'Please describe the location and experience.'],
-      maxlength: 150,
+      required: true,
+      maxlength: 300,
     },
     date: {
       type: Date,
       required: true,
     },
+    image: {
+      type: String,
+    },
     createdBy: {
       type: String,
-      required: [true, 'Which user is uploading this?'],
+      required: true,
     },
     rating: {
       type: Number,
+      min: 0,
+      max: 5,
     },
   },
   { timestamps: true }
 );
 
-export default model<ILocation>('Location', locationSchema);
+export default model<ILocation>('Location', LocationSchema);

@@ -8,10 +8,19 @@ export const createLocation = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { locationName, country, city, description, date, createdBy, rating } =
-    req.body;
+  const {
+    title,
+    locationName,
+    country,
+    city,
+    description,
+    date,
+    createdBy,
+    rating,
+  } = req.body;
 
   const newLocation = new Location({
+    title,
     locationName,
     country,
     city,
