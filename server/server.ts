@@ -1,17 +1,16 @@
-import express from 'express'
-import path from 'path'
-import cors from 'cors'
-import 'dotenv/config'
-import memoryRoutes from './routes/memory'
-import userRoutes from './routes/user'
+import express from 'express';
+import path from 'path';
+import cors from 'cors';
+import 'dotenv/config';
+import locationRoutes from './routes/location';
+import userRoutes from './routes/user';
 
 import { connect } from './database';
-
 
 const app = express();
 
 // Settings
-app.set('port', process.env.PORT ||5000)
+app.set('port', process.env.PORT || 5000);
 
 app.use(cors());
 
@@ -20,19 +19,18 @@ app.use(express.static(buildPath));
 
 // middlewares
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/', memoryRoutes);
+app.use('/api/', locationRoutes);
 app.use('/api/', userRoutes);
 
-
 (async () => {
-    try {
-        await connect();
-        await app.listen(app.get('port'));
-        console.log(`Server on port ${app.get('port')}`);
-    } catch (e) {
-        console.log(e);
-    }
+  try {
+    await connect();
+    await app.listen(app.get('port'));
+    console.log(`Server on port ${app.get('port')}`);
+  } catch (e) {
+    console.log(e);
+  }
 })();

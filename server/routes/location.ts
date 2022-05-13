@@ -1,8 +1,10 @@
 import express from 'express';
 import {
   createLocation,
+  deleteLocation,
   getLocation,
   getLocations,
+  updateLocation,
 } from '../controllers/location';
 
 import { upload } from '../middleware/multer';
@@ -12,20 +14,19 @@ const router = express.Router();
 
 // Create location with images
 router.post(
-  '/locations/',
+  '/locations',
+  upload('images-for-application').single('image'),
 
   createLocation
 );
 
-// upload('images-for-application').array('photos'),
-
 router.route('/locations/:id').get(getLocation);
 
 //Update
-//router.put('/locations/:id', verifyUser, updateLocation);
+router.put('/locations/:id', verifyUser, updateLocation);
 
 //Delete
-//router.delete('/locations/:id', verifyUser, deleteLocation);
+router.delete('/locations/:id', verifyUser, deleteLocation);
 
 //Get One
 router.post('/locations', getLocation);
