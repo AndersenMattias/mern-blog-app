@@ -18,7 +18,7 @@ router.put('/users/:id', verifyUser, updateUser);
 router.delete('/users/:id', verifyUser, deleteUser);
 
 //Get One
-router.post('/users', getUser);
+router.get('/users/:id', getUser);
 
 //Get All
 router.get('/users', getUsers);

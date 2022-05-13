@@ -1,10 +1,13 @@
 export interface ILocation {
   _id: string;
   locationName: string;
-  imageUrl: string;
+  country: string;
+  city: string;
   description: string;
   date: Date;
+  photos: string[];
   createdBy: string;
+  rating: number;
 }
 
 export interface Props {
