@@ -30,7 +30,7 @@ export const createPost = async (
   }
 };
 
-// update a location
+// update a post
 export const updatePost = async (
   req: Request,
   res: Response,
@@ -103,7 +103,8 @@ export const getPosts = async (
   next: NextFunction
 ) => {
   try {
-    const post = await Post.find().lean();
+    const post = await Post.find({});
+    console.log(post);
     return res.status(200).send({ message: 'Posts found!', post });
   } catch (err) {
     next(createError(500, 'Something went wrong, try again'));

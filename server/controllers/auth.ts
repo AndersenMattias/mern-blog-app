@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import config from '../config/config';
 
 export const register = async (req: any, res: any, next: any) => {
-  const { username, email, country } = req.body;
+  const { username, email } = req.body;
   try {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(req.body.password, salt);
@@ -14,14 +14,13 @@ export const register = async (req: any, res: any, next: any) => {
       username,
       email,
       password: hash,
-      avatar: req.file.location,
-      country,
+      profilePic: req.file.location,
     });
 
     await newUser.save();
-    res.status(200).send('User has been created.');
+    res.status(200).send({ message: 'User has been created.' });
   } catch (err) {
-    next(err);
+    next(createError(400, `Couldn't create user, try again!`));
   }
 };
 export const login = async (req: any, res: any, next: any) => {
@@ -36,18 +35,15 @@ export const login = async (req: any, res: any, next: any) => {
     if (!isPasswordCorrect)
       return next(createError(400, 'Wrong password or username!'));
 
-    const token = jwt.sign(
-      { id: user._id, isMember: user.isMember },
-      config.JWT
-    );
+    const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, config.JWT);
 
     res
       .cookie('access_token', token, {
         httpOnly: true,
       })
       .status(200)
-      .json({ message: 'logged in' });
+      .send({ message: 'logged in', member: user.isMember });
   } catch (err) {
-    next(err);
+    next(createError(500, 'Something went wrong, try'));
   }
 };
