@@ -12,10 +12,10 @@ const router = express.Router();
 // router.post('/users', createUser);
 
 //Update
-router.put('/users/:id', verifyUser, updateUser);
+router.put('/users/:id', updateUser);
 
 //Delete
-router.delete('/users/:id', verifyUser, deleteUser);
+router.delete('/users/:id', deleteUser);
 
 //Get One
 router.get('/users/:id', getUser);
@@ -23,10 +23,11 @@ router.get('/users/:id', getUser);
 //Get All
 router.get('/users', getUsers);
 
+//  upload('images-for-application').single('avatar'),
 // Register User
 router.post(
   '/users/register',
-  upload('images-for-application').single('avatar'),
+
   register
 );
 

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import User from '../models/User';
+import { createError } from '../utils/error';
 
 export const updateUser = async (
   req: Request,
@@ -13,9 +14,9 @@ export const updateUser = async (
       { $set: req.body },
       { new: true }
     ).lean();
-    res.status(200).json(updatedUser);
+    res.status(200).send({ message: 'User has been updated!', updatedUser });
   } catch (err) {
-    next(err);
+    next(createError(500, `Couldn't update user, try again.`));
   }
 };
 export const deleteUser = async (
@@ -25,9 +26,9 @@ export const deleteUser = async (
 ) => {
   try {
     await User.findByIdAndDelete(req.params.id).lean();
-    res.status(200).json('User has been deleted.');
+    res.status(200).send({ message: 'User has been deleted..' });
   } catch (err) {
-    next(err);
+    next(createError(500, 'Something went wrong, try again!'));
   }
 };
 export const getUser = async (
@@ -37,9 +38,9 @@ export const getUser = async (
 ) => {
   try {
     const user = await User.findById(req.params.id).lean();
-    res.status(200).json(user);
+    res.status(200).send({ message: 'User found!', user });
   } catch (err) {
-    next(err);
+    next(createError(500, `Couldn't find user, try again.`));
   }
 };
 export const getUsers = async (
@@ -49,8 +50,8 @@ export const getUsers = async (
 ) => {
   try {
     const users = await User.find().lean();
-    res.status(200).json(users);
+    res.status(200).send({ message: 'Users found!', users });
   } catch (err) {
-    next(err);
+    next(createError(500, `Couldn't get users, try again.`));
   }
 };

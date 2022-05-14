@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import { UserDocument } from '../interfaces/user';
+import { Schema, model } from 'mongoose';
+import { IUser } from '../interfaces/user';
 
-const UserSchema = new mongoose.Schema(
+const UserSchema = new Schema<IUser>(
   {
     username: {
       type: String,
@@ -21,26 +21,26 @@ const UserSchema = new mongoose.Schema(
       minlength: 7,
       trim: true,
     },
-    avatar: {
-      type: String,
-      required: true,
-    },
-    country: {
+    profilePic: {
       type: String,
       required: true,
     },
     isMember: {
       type: Boolean,
-      default: true,
+      default: false,
+    },
+    isAdmin: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }
 );
 
-UserSchema.virtual('locations', {
-  ref: 'Location',
+UserSchema.virtual('posts', {
+  ref: 'Post',
   localField: '_id',
   foreignField: 'owner',
 });
 
-export default mongoose.model<UserDocument>('User', UserSchema);
+export default model<IUser>('User', UserSchema);

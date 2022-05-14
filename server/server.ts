@@ -2,7 +2,7 @@ import express from 'express';
 import path from 'path';
 import cors from 'cors';
 import 'dotenv/config';
-import locationRoutes from './routes/location';
+import postRoutes from './routes/post';
 import userRoutes from './routes/user';
 
 import { connect } from './database';
@@ -22,7 +22,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/', locationRoutes);
+app.use('/api/', postRoutes);
 app.use('/api/', userRoutes);
 
 (async () => {
