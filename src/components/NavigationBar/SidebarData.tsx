@@ -1,4 +1,4 @@
-import * as Icon from 'react-bootstrap-icons';
+import * as Icon from '@mui/icons-material';
 
 interface ISidebarData {
   title: string;
@@ -17,7 +17,7 @@ export const SidebarData = [
   {
     title: 'My Page',
     path: '/my-page',
-    icon: <Icon.PersonCircle />,
+    icon: <Icon.AccountCircle />,
     cName: 'nav-text',
   },
   {
@@ -29,13 +29,13 @@ export const SidebarData = [
   {
     title: 'Messages',
     path: '/messages',
-    icon: <Icon.ChatLeftDots />,
+    icon: <Icon.Message />,
     cName: 'nav-text',
   },
   {
     title: 'Support',
     path: '/support',
-    icon: <Icon.QuestionCircle />,
+    icon: <Icon.HelpOutline />,
     cName: 'nav-text',
   },
 ];

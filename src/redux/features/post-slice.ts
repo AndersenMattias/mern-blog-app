@@ -13,7 +13,8 @@ interface Post {
   title: string;
   bodyText: string;
   image: string;
-  createdBy: string;
+  author: string;
+  createdAt: Date | string;
   categories: string[];
 }
 

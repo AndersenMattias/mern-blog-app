@@ -1,6 +1,6 @@
-import BootstrapBtn from 'components/BootstrapBtn/BootstrapBtn';
-import { ISignIn, Props } from 'interfaces/interfaces';
-import { Container } from 'react-bootstrap';
+import BootstrapBtn from 'components/MUIButton/MUIButton';
+import { ISignIn } from 'interfaces/interfaces';
+import { Container } from '@mui/material';
 
 const SignIn = ({ toggleLogin }: ISignIn) => {
   return (
@@ -10,7 +10,7 @@ const SignIn = ({ toggleLogin }: ISignIn) => {
       <BootstrapBtn
         type='button'
         text='Logga in'
-        variant='primary'
+        btnStyle='primary'
         onClick={toggleLogin}
       />
     </Container>

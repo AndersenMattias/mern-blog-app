@@ -1,18 +1,15 @@
-export interface ILocation {
+export interface IPost {
   _id: string;
   title: string;
-  locationName: string;
-  country: string;
-  city: string;
-  description: string;
-  date: Date;
+  bodyText: string;
   image: string;
-  createdBy: string;
-  rating: number;
+  author: string;
+  createdAt: Date | string;
+  categories: string[];
 }
 
-export interface Props {
-  fetchData: ILocation[];
+export interface PostProps {
+  post: IPost;
 }
 
 export interface ISignIn {
