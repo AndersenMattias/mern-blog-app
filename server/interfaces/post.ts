@@ -3,7 +3,7 @@ export interface IPost extends Document {
   bodyText: string;
   date: Date;
   image: string;
-  createdBy: string;
+  author: string;
+  createdAt: string;
   categories: string;
-  owner: any;
 }

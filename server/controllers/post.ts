@@ -9,13 +9,14 @@ export const createPost = async (
   next: NextFunction
 ) => {
   console.log(req.body);
-  const { title, bodyText, image, createdBy, categories } = req.body;
+  const { title, bodyText, image, author, createdAt, categories } = req.body;
 
   const newPost = new Post({
     title,
     bodyText,
     image,
-    createdBy,
+    author,
+    createdAt,
     categories,
   });
 
@@ -38,7 +39,7 @@ export const updatePost = async (
 ) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post?.createdBy === req.body.username) {
+    if (post?.author === req.body.username) {
       try {
         const updatedPost = await Post.findByIdAndUpdate(
           req.params.id,
@@ -67,7 +68,7 @@ export const deletePost = async (
 ) => {
   try {
     const post = await Post.findById(req.params.id);
-    if (post?.createdBy === req.body.username) {
+    if (post?.author === req.body.username) {
       try {
         await post?.delete();
         res.status(200).send({ message: 'Post has been deleted..' });

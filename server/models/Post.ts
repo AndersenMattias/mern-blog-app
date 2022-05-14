@@ -14,7 +14,11 @@ const PostSchema = new Schema<IPost>(
     image: {
       type: String,
     },
-    createdBy: {
+    author: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
       type: String,
       required: true,
     },
