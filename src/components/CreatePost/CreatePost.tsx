@@ -1,7 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
+import { InewPost } from 'interfaces/interfaces';
+
+// Utils for this component
+import { MenuProps, options, getStyles } from './util';
+
+// access Mui Icons
 import * as Icon from '@mui/icons-material';
 
+import axios from 'axios';
+
+// Material UI
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,36 +28,66 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@material-ui/core/ListItemText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { MultiSelect } from 'react-multi-select-component';
+
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Chip from '@mui/material/Chip';
 
 import Copyright from 'components/Copyright/Copyright';
 import MUIButton from 'components/MUIButton/MUIButton';
+import { POST } from 'Api/api';
 
-const options = [
-  { label: 'Tech ', value: 'Tech' },
-  { label: `Fitness`, value: 'Fitness' },
-  { label: `Music `, value: 'Music' },
-  { label: `Food `, value: 'Food' },
-  { label: `Sport`, value: 'Sport' },
-];
-
-const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-  event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  console.log({
-    email: data.get('email'),
-    password: data.get('password'),
-  });
+const FCWidth = {
+  width: '20rem',
 };
 
+const postSchema = yup.object({
+  title: yup.string().required(),
+  bodyText: yup.string().required(),
+  image: yup.string().required(),
+  author: yup.string().required(),
+  createdAt: yup.string().required(),
+  categories: yup.array().required(),
+});
+
+interface IFormInputs {
+  title: string;
+  bodyText: string;
+  image: File | string;
+  author: string;
+  createdAt: Date | string;
+  categories: string[];
+}
+
 const CreatePost = (): JSX.Element => {
-  const [categories, setCategories] = useState([]);
+  const {
+    control,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<IFormInputs>({
+    resolver: yupResolver(postSchema),
+    defaultValues: {
+      categories: [],
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    console.log(data);
+    const formData = new FormData();
+    formData.append('image', data.image[0]);
+
+    const res = await POST.createPost(data).then((res) => res.json());
+    console.log(JSON.stringify(res));
+  };
 
   const theme = createTheme();
+
+  console.log('errors are', errors);
 
   return (
     <ThemeProvider theme={theme}>
@@ -66,78 +109,136 @@ const CreatePost = (): JSX.Element => {
           </Typography>
           <Box
             component='form'
-            onSubmit={handleSubmit}
+            onSubmit={handleSubmit(onSubmit)}
             noValidate
             sx={{ mt: 1 }}
           >
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              name='Title'
-              label='Title'
-              type='text'
-              id='Title'
-              autoFocus
+            <Controller
+              name='title'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label='Title'
+                  variant='outlined'
+                  error={!!errors.title}
+                  helperText={errors.title ? 'This field is required.' : ''}
+                  fullWidth
+                  margin='dense'
+                />
+              )}
             />
-            <TextField
-              multiline
-              rows={8}
-              maxRows={10}
-              margin='normal'
-              required
-              fullWidth
+
+            <Controller
               name='bodyText'
-              label='Bodytext'
-              type='text'
-              id='bodyText'
-            />
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              name='Author'
-              label='Author'
-              type='text'
-              id='Author'
-              autoFocus
-            />
-            <TextField
-              margin='normal'
-              required
-              fullWidth
-              name='Date'
-              type='date'
-              id='Date'
-              value={new Date().toISOString().substring(0, 10)}
-              autoFocus
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label='Bodytext'
+                  variant='outlined'
+                  error={!!errors.bodyText}
+                  helperText={errors.bodyText ? 'This field is required.' : ''}
+                  fullWidth
+                  margin='dense'
+                  multiline
+                  rows={8}
+                />
+              )}
             />
 
-            <FormControl fullWidth>
-              <MultiSelect
-                options={options}
-                value={categories}
-                onChange={setCategories}
-                labelledBy='Select'
-              />
-            </FormControl>
+            <Controller
+              name='author'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label='Author'
+                  variant='outlined'
+                  error={!!errors.author}
+                  helperText={errors.author ? 'This field is required.' : ''}
+                  fullWidth
+                  margin='dense'
+                />
+              )}
+            />
+            <Controller
+              name='createdAt'
+              control={control}
+              defaultValue={new Date().toISOString().substring(0, 10)}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  type='date'
+                  variant='outlined'
+                  error={!!errors.createdAt}
+                  helperText={errors.createdAt ? 'This field is required.' : ''}
+                  fullWidth
+                  margin='dense'
+                />
+              )}
+            />
 
-            <FormControl>
-              <Button variant='contained' component='label' color='primary'>
-                {' '}
-                <Icon.Add /> Upload an image.
-                <input type='file' hidden />
-              </Button>
-            </FormControl>
+            <Controller
+              name='categories'
+              control={control}
+              defaultValue={[]}
+              render={({ field }) => (
+                <FormControl sx={FCWidth}>
+                  <InputLabel id='category'>Categories</InputLabel>
+                  <Select
+                    {...field}
+                    labelId='category'
+                    label='category'
+                    multiple
+                    defaultValue={[]}
+                  >
+                    {options.map((option: any, index) => (
+                      <MenuItem value={option.value} key={index}>
+                        {option.value}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+            />
 
             <br />
 
+            <Controller
+              name='image'
+              control={control}
+              defaultValue=''
+              render={({ field }) => (
+                <Button variant='contained' component='label' color='primary'>
+                  {' '}
+                  <Icon.Add /> Upload an image.
+                  <TextField
+                    {...field}
+                    type='file'
+                    variant='outlined'
+                    error={!!errors.createdAt}
+                    helperText={
+                      errors.createdAt ? 'This field is required.' : ''
+                    }
+                    fullWidth
+                    margin='dense'
+                    hidden
+                  />
+                </Button>
+              )}
+            />
+            <br />
             <FormControl>
               <FormControlLabel
                 control={<Checkbox value='remember' color='primary' />}
                 label={`I'm not a robot.`}
               />
             </FormControl>
+
             <Button
               type='submit'
               fullWidth
