@@ -15,7 +15,7 @@ const PostList = (): JSX.Element => {
       </>
     );
   } else {
-    return <p>No articles to be found!</p>;
+    return <p>No posts to be found!</p>;
   }
 };
 

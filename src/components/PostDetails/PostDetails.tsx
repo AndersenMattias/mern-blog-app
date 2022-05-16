@@ -1,5 +1,4 @@
-import BootstrapBtn from 'components/MUIButton/MUIButton';
-import { IPost } from 'interfaces/interfaces';
+import { IPost } from 'interfaces/post';
 import { Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
@@ -18,7 +17,10 @@ const PostDetails = () => {
       <h4>{post?.title}</h4>
       <img src={post?.image} alt='post-img' />
       <p>Author: {post?.author}</p>
-      Categories:
+      Categories:{' '}
+      {post?.categories.map((cat) => (
+        <p>{cat}</p>
+      ))}
       <p>Created{post?.createdAt.toString().split('T')[0]}</p>
     </Container>
   );

@@ -1,6 +1,6 @@
-import BootstrapBtn from 'components/MUIButton/MUIButton';
+import Button from 'components/Button/Button';
 
-import { IPost, PostProps } from 'interfaces/interfaces';
+import { IPost, PostProps } from 'interfaces/post';
 import { Link } from 'react-router-dom';
 
 import { Container } from '@mui/material';
@@ -8,7 +8,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 const Post = ({ post }: PostProps): JSX.Element => {
@@ -27,8 +26,13 @@ const Post = ({ post }: PostProps): JSX.Element => {
           </Typography>
         </CardContent>
         <CardActions>
-          <BootstrapBtn type='button' btnStyle='primary' text='Share' />
-          <BootstrapBtn type='button' btnStyle='primary' text='Read more' />
+          <Button type='button' color='primary'>
+            Share{' '}
+          </Button>
+          <Button type='button' color='primary'>
+            {' '}
+            Read more
+          </Button>
         </CardActions>
       </Card>
     </Link>
