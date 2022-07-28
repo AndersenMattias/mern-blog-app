@@ -1,23 +1,16 @@
-import Alert, { AlertProps, AlertColor } from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Stack from '@mui/material/Stack';
-
-type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
-
 interface IAlertProps {
-  alertTitle: string;
+  heading: string;
   text: string;
-  severity: Severity;
 }
 
-const AlertMessage = ({ severity, alertTitle, text }: IAlertProps) => {
+const AlertMessage = ({ heading, text }: IAlertProps) => {
   return (
-    <Stack sx={{ width: '100%' }} spacing={2}>
-      <Alert variant='outlined' severity={severity}>
-        <AlertTitle>{alertTitle}</AlertTitle>
-        {text}
-      </Alert>
-    </Stack>
+    <div>
+      <div>
+        <h3>{heading}</h3>
+        <p>{text}</p>
+      </div>
+    </div>
   );
 };
 

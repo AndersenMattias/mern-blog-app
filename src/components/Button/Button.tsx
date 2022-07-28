@@ -1,28 +1,44 @@
-import {
-  Button as MuiButton,
-  ButtonProps,
-  makeStyles,
-} from '@material-ui/core';
-
-import { PropTypes } from '@mui/material';
-
-interface IButtonProps extends ButtonProps {
-  sx?: object | boolean | Function | object;
-  color: PropTypes.Color | undefined;
+interface IButtonProps {
+  colour: string;
+  text?: string;
+  disabled?: boolean;
+  type?: 'submit' | 'reset' | 'button';
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  children?: React.ReactNode;
 }
 
+const STYLES: Array<string> = [
+  'btn--primary',
+  'btn--warning',
+  'btn--danger',
+  'btn--success',
+  'btn--dark',
+  'btn--primary--outline',
+  'btn--warning--outline',
+  'btn--danger--outline',
+  'btn--success--outline',
+];
+
 const Button = ({
-  variant,
-  color,
-  children,
-  size,
   disabled,
-}: IButtonProps): JSX.Element => {
+  text,
+  type,
+  onClick,
+  colour,
+  children,
+}: IButtonProps) => {
+  const checkButtonStyle = STYLES.includes(colour) ? colour : STYLES[0];
+
   return (
-    <MuiButton variant={variant} color={color} size={size} disabled={disabled}>
+    <button
+      disabled={disabled}
+      className={`btn ${checkButtonStyle}`}
+      onClick={onClick}
+      type={type}
+    >
+      {text}
       {children}
-    </MuiButton>
+    </button>
   );
 };
-
 export default Button;

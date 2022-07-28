@@ -1,49 +1,47 @@
 import { useEffect, useState } from 'react';
-import { LOCATION } from './components/Api/api';
+import { Routes, Route } from 'react-router-dom';
+
+import { POST } from './Api/api';
+
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from 'redux/store';
+
+import { addPosts } from './redux/features/post-slice';
 
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
-import NavigationBar from 'components/NavigationBar/NavigationBar';
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// Components
 import Home from 'pages/Home/Home';
-import { ILocation } from 'interfaces/interfaces';
-import LocationDetails from 'components/LocationDetails/LocationDetails';
-import Locations from 'components/Locations/Locations';
+import PostList from 'components/PostList/PostList';
+import PostDetails from 'components/PostDetails/PostDetails';
+import Header from 'components/Header/Header';
 
 function App() {
-  const [fetchData, setFetchData] = useState<ILocation[]>([]);
+  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchPosts = async () => {
       try {
-        const resp = await LOCATION.getLocations();
+        const resp = await POST.getPosts();
         const data = await resp.json();
-        setFetchData(data.locations);
+        console.log(data);
+        dispatch(addPosts(data.post));
       } catch (e) {
         console.log(e);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchPosts();
+  }, [dispatch]);
 
   return (
     <>
-      <Router>
-        <Routes>
-          <Route path='/' element={<Home fetchData={fetchData} />} />
-          <Route
-            path='/locations'
-            element={<Locations fetchData={fetchData} />}
-          />
-          <Route
-            path='/location-details/:id'
-            element={<LocationDetails fetchData={fetchData} />}
-          />
-        </Routes>
-      </Router>
+      <Header />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/posts/' element={<PostList />} />
+        <Route path='/post-details/:id' element={<PostDetails />} />
+      </Routes>
     </>
   );
 }

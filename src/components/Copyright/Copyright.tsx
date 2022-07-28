@@ -1,21 +1,11 @@
-import Typography from '@mui/material/Typography';
-import { Link } from 'react-router-dom';
-
-const Copyright = (props: any) => {
+const Copyright = (): JSX.Element => {
   return (
-    <Typography
-      variant='body2'
-      color='text.secondary'
-      align='center'
-      {...props}
-    >
+    <h5>
       {'Copyright © '}
-      <a color='inherit' href='https://mattias-andersen.com/'>
-        Mattias Andersen
-      </a>{' '}
+      <a href='https://mattias-andersen.com/'>Mattias Andersen</a>{' '}
       {new Date().getFullYear()}
       {'.'}
-    </Typography>
+    </h5>
   );
 };
 

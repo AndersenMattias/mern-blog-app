@@ -8,9 +8,6 @@ import { verifyUser } from '../utils/verifyAuth';
 
 const router = express.Router();
 
-//Create
-// router.post('/users', createUser);
-
 //Update
 router.put('/users/:id', updateUser);
 
@@ -23,11 +20,10 @@ router.get('/users/:id', getUser);
 //Get All
 router.get('/users', getUsers);
 
-//  upload('images-for-application').single('avatar'),
 // Register User
 router.post(
   '/users/register',
-
+  upload('images-for-application').single('profilePic'),
   register
 );
 

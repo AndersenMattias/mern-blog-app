@@ -1,6 +1,17 @@
 import { Request, Response, NextFunction } from 'express';
+import { generateUploadURL } from '../middleware/s3';
 import Post from '../models/Post';
 import { createError } from '../utils/error';
+
+// Upload image
+export const getUrl = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const url = await generateUploadURL();
+    res.send({ url });
+  } catch (e) {
+    next(createError(500, `Something went wrong, try again.`));
+  }
+};
 
 // Create a Post
 export const createPost = async (
@@ -8,7 +19,6 @@ export const createPost = async (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(req.body);
   const { title, bodyText, image, author, createdAt, categories } = req.body;
 
   const newPost = new Post({
@@ -77,6 +87,22 @@ export const deletePost = async (
       }
     } else {
       res.status(401).send({ message: 'You can delete only your post!' });
+    }
+  } catch (err) {
+    next(createError(500, 'Something went wrong, try again'));
+  }
+};
+export const deletePosts = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    try {
+      await Post.deleteMany();
+      res.status(200).send({ message: 'Post has been deleted..' });
+    } catch (err) {
+      next(createError(500, 'Something went wrong, try again'));
     }
   } catch (err) {
     next(createError(500, 'Something went wrong, try again'));

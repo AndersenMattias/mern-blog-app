@@ -5,6 +5,7 @@ import { postReduxState } from 'redux/features/post-slice';
 
 const PostList = (): JSX.Element => {
   const posts = useSelector(postReduxState);
+  console.log(posts);
 
   if (posts.posts.length > 1) {
     return (

@@ -1,19 +1,16 @@
-import BootstrapBtn from 'components/MUIButton/MUIButton';
+import Button from 'components/Button/Button';
 import { ISignIn } from 'interfaces/interfaces';
-import { Container } from '@mui/material';
 
 const SignIn = ({ toggleLogin }: ISignIn) => {
   return (
-    <Container style={{ textAlign: 'right' }}>
+    <div style={{ textAlign: 'right' }}>
       <input type='text' value={'E-mail'} />
       <input type='text' value={'Password'} />
-      <BootstrapBtn
-        type='button'
-        text='Logga in'
-        btnStyle='primary'
-        onClick={toggleLogin}
-      />
-    </Container>
+      <Button colour='btn--primary' onClick={toggleLogin}>
+        {' '}
+        Logga in{' '}
+      </Button>
+    </div>
   );
 };
 

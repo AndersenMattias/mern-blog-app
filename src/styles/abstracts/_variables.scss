@@ -1,0 +1,75 @@
+// colours
+$primary: #4628ff;
+$warning: #ffd028;
+$danger: #eb3f27;
+$success: #75fa83;
+$white: #fdfdfd;
+$dark: #181717;
+$orange: orange;
+
+$linkHover: #f8b500;
+
+// heights
+$headerHeight: 6em;
+
+//spacing
+$spacing-sm: 0.5em;
+$spacing-md: 1em;
+$spacing-lg: 2em;
+
+// Font Sizes
+$xxsFont: 12px;
+$xsFont: 14px;
+$defaultsize: 1em;
+$largeFont: 18px;
+$XlFont: 1.5em;
+
+//breakpoints
+$mobile: 600px;
+$tablet: 768px;
+$laptop: 992px;
+$desktop: 1350px;
+
+$sm: 37.5em;
+$md: 48em;
+$lg: 64em;
+$xl: 75em;
+
+@mixin breakpoint($point) {
+  @if $point == md {
+    @media (min-width: $md) {
+      @content;
+    }
+  }
+}
+
+// Media query mixins
+@mixin smallmobile {
+  @media (max-width: #{$mobile}) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: #{$tablet}  ) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: #{$laptop }) {
+    @content;
+  }
+}
+
+@mixin laptop {
+  @media (max-width: #{$desktop }) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$desktop}) {
+    @content;
+  }
+}

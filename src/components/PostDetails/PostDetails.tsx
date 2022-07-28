@@ -1,5 +1,4 @@
 import { IPost } from 'interfaces/post';
-import { Container } from '@mui/material';
 import { useParams } from 'react-router-dom';
 
 import { useSelector } from 'react-redux';
@@ -13,7 +12,7 @@ const PostDetails = () => {
   console.log(post);
 
   return (
-    <Container>
+    <div>
       <h4>{post?.title}</h4>
       <img src={post?.image} alt='post-img' />
       <p>Author: {post?.author}</p>
@@ -22,7 +21,7 @@ const PostDetails = () => {
         <p>{cat}</p>
       ))}
       <p>Created{post?.createdAt.toString().split('T')[0]}</p>
-    </Container>
+    </div>
   );
 };
 

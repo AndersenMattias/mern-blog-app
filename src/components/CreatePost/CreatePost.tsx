@@ -1,269 +1,252 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-
-import { InewPost } from 'interfaces/interfaces';
+import React, { useEffect, useState } from 'react';
+import DatePicker from 'react-datepicker';
+import Select from 'react-select';
 
 // Utils for this component
-import { MenuProps, options, getStyles } from './util';
+import { selectOptions } from './util';
 
-// access Mui Icons
-import * as Icon from '@mui/icons-material';
-
-import axios from 'axios';
-
-// Material UI
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Chip from '@mui/material/Chip';
-
-import Copyright from 'components/Copyright/Copyright';
-import MUIButton from 'components/MUIButton/MUIButton';
+// api calls frontend
 import { POST } from 'Api/api';
+//components
+import AlertMessage from 'components/AlertMessage/AlertMessage';
+import Button from 'components/Button/Button';
 
-const FCWidth = {
-  width: '20rem',
-};
+// interfaces
+import { IFormInputs, IPost } from 'interfaces/post';
 
-const postSchema = yup.object({
-  title: yup.string().required(),
-  bodyText: yup.string().required(),
-  image: yup.string().required(),
-  author: yup.string().required(),
-  createdAt: yup.string().required(),
-  categories: yup.array().required(),
-});
-
-interface IFormInputs {
-  title: string;
-  bodyText: string;
-  image: File | string;
-  author: string;
-  createdAt: Date | string;
-  categories: string[];
-}
+import { GoBook } from 'react-icons/go';
+import { GrFormAdd } from 'react-icons/gr';
 
 const CreatePost = (): JSX.Element => {
-  const {
-    control,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<IFormInputs>({
-    resolver: yupResolver(postSchema),
-    defaultValues: {
-      categories: [],
-    },
+  const [input, setInput] = useState<IFormInputs>({
+    title: '',
+    bodyText: '',
+    image: '',
+    author: '',
+    createdAt: new Date(),
+    categories: [],
   });
 
-  const onSubmit = async (data: any) => {
-    console.log(data);
-    const formData = new FormData();
-    formData.append('image', data.image[0]);
+  const [toggleUpload, setUpload] = useState<boolean>(false);
 
-    const res = await POST.createPost(data).then((res) => res.json());
-    console.log(JSON.stringify(res));
+  const [dateValue, setDateValue] = useState(new Date());
+  const [postImage, setPostImage] = useState<string | any>({
+    name: '',
+    myFile: '',
+  });
+  const [selectCategories, setSelectCategories] = useState<any>([]);
+  const [urlImg, setUrlImg] = useState();
+
+  // State for handling error on form
+  const [displayAuthErr, setDisplayAuthErr] = useState<boolean>(false);
+  const [displayErrorMessage, setDisplayErrorMessage] = useState('');
+  const [checkTerm, setCheckTerm] = useState<boolean>(false);
+
+  useEffect(() => {
+    const { title, bodyText, image, author, createdAt, categories } = input;
+    if (
+      title.length > 3 &&
+      bodyText.length > 5 &&
+      image != null &&
+      author.length > 3 &&
+      createdAt != null &&
+      categories.length > 1
+    ) {
+      setDisplayAuthErr(false);
+      setDisplayErrorMessage('');
+    } else if (
+      title.length > 3 ||
+      bodyText.length > 5 ||
+      image != null ||
+      author.length > 3 ||
+      createdAt != null ||
+      categories.length > 1
+    ) {
+      setDisplayAuthErr(false);
+      setDisplayErrorMessage('');
+    }
+  }, [
+    input.title,
+    input.bodyText,
+    input.image,
+    input.author,
+    input.createdAt,
+    input.categories,
+  ]);
+
+  const onToggleCheck = () => setCheckTerm(!checkTerm);
+  const onToggleUpload = () => setUpload(!toggleUpload);
+
+  // Upload file function
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileName = e.target.files![0].name;
+    const file = e.target.files![0];
+    setPostImage({ ...postImage, myFile: file, name: fileName });
   };
 
-  const theme = createTheme();
+  // handle input fields
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.currentTarget;
+    setInput((prevState) => ({ ...prevState, [name]: value }));
+  };
 
-  console.log('errors are', errors);
+  // on submit form
+  const onFormSubmit = async (e: React.MouseEvent<HTMLElement>) => {
+    console.log('form');
+    e.preventDefault();
+    console.log(selectCategories);
+    console.log(postImage.myFile);
+    if (!input.title || !input.bodyText || !input.author) {
+      console.log('i if sats');
+      setDisplayAuthErr(true);
+      console.log('i if sats');
+      setDisplayErrorMessage('Please fill in all of the fields.');
+    } else if (input.title.length < 2) {
+      console.log('else if sats 1');
+      setDisplayErrorMessage('Title field must be longer than two characters');
+      setDisplayAuthErr(true);
+    } else if (input.bodyText.length < 5) {
+      console.log('else if sats 2');
+      setDisplayErrorMessage('Please write some more about your post.');
+      setDisplayAuthErr(true);
+    } else if (input.author.length < 2) {
+      setDisplayErrorMessage(
+        'Author field must be longer than two characters.'
+      );
+      setDisplayAuthErr(true);
+    }
+
+    // else if all good create new post!
+    else if (input.title && input.bodyText && input.author && !displayAuthErr) {
+      console.log('ALLT OK!');
+      const newPost: IPost = {
+        title: input.title,
+        bodyText: input.bodyText,
+        image: urlImg,
+        author: input.author,
+        createdAt: dateValue,
+        categories: selectCategories,
+      };
+
+      console.log(newPost);
+
+      const res = await POST.createPost(newPost)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((e) => {
+          setDisplayAuthErr(true);
+          console.log(e);
+          setDisplayErrorMessage('Something went wrong, try again!');
+        });
+    }
+  };
+
+  // handle multiple select values
+  const onHandleMultiple = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    let newArr = [...selectCategories]; // copying the old datas array
+    newArr.push(e.target.value);
+    console.log(newArr);
+    setSelectCategories(newArr);
+
+    /*
+
+    setSelectCategories(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value
+    );
+    */
+  };
+
+  // Upload image and return URL from S3
+  const onUploadImg = async (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    const { url } = await POST.getUrl().then((res) => res.json());
+
+    await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      body: postImage.myFile,
+    });
+    const imageUrl = url.split('?')[0];
+    setUrlImg(imageUrl);
+  };
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container component='main' maxWidth='xs'>
-        <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <Icon.MenuBook />
-          </Avatar>
-          <Typography component='h1' variant='h5'>
-            Create Post
-          </Typography>
-          <Box
-            component='form'
-            onSubmit={handleSubmit(onSubmit)}
-            noValidate
-            sx={{ mt: 1 }}
-          >
-            <Controller
-              name='title'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label='Title'
-                  variant='outlined'
-                  error={!!errors.title}
-                  helperText={errors.title ? 'This field is required.' : ''}
-                  fullWidth
-                  margin='dense'
-                />
-              )}
-            />
+    <div>
+      <div>
+        <GoBook />
+      </div>
+      <h5>Create Post</h5>
+      <form>
+        <input
+          type='text'
+          name='title'
+          placeholder='Title'
+          value={input.title}
+          onChange={handleInputChange}
+        />
+        <input
+          type=''
+          name='bodyText'
+          placeholder='Bodytext'
+          multiple
+          style={{ width: 500 }}
+          value={input.bodyText}
+          onChange={handleInputChange}
+        />
+        <input
+          type='text'
+          name='author'
+          placeholder='Author'
+          value={input.author}
+          onChange={handleInputChange}
+        />
+        <DatePicker
+          selected={dateValue}
+          onChange={(date: Date) => setDateValue(date)}
+        />
+        <Select
+          isMulti
+          placeholder='Select categories'
+          defaultValue={selectCategories}
+          onChange={setSelectCategories}
+          options={selectOptions}
+        />
+        <br />
+        <br />
+        <input type='file' onChange={handleFileUpload} />
+        <p>Choosen file: {postImage.name}</p>
+        <br />
+        <Button type='submit' onClick={onUploadImg} colour='btn--primary'>
+          Upload
+        </Button>
+        <div>
+          <img src={urlImg} alt='' width={200} height={200} />
+        </div>
+        <br />
+        <input
+          type='checkbox'
+          onChange={onToggleCheck}
+          placeholder={`I'm not a robot.`}
+        />
+        <Button
+          type='submit'
+          colour='btn--primary'
+          text='Create post'
+          onClick={onFormSubmit}
+        />
+      </form>
 
-            <Controller
-              name='bodyText'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label='Bodytext'
-                  variant='outlined'
-                  error={!!errors.bodyText}
-                  helperText={errors.bodyText ? 'This field is required.' : ''}
-                  fullWidth
-                  margin='dense'
-                  multiline
-                  rows={8}
-                />
-              )}
-            />
-
-            <Controller
-              name='author'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  label='Author'
-                  variant='outlined'
-                  error={!!errors.author}
-                  helperText={errors.author ? 'This field is required.' : ''}
-                  fullWidth
-                  margin='dense'
-                />
-              )}
-            />
-            <Controller
-              name='createdAt'
-              control={control}
-              defaultValue={new Date().toISOString().substring(0, 10)}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  type='date'
-                  variant='outlined'
-                  error={!!errors.createdAt}
-                  helperText={errors.createdAt ? 'This field is required.' : ''}
-                  fullWidth
-                  margin='dense'
-                />
-              )}
-            />
-
-            <Controller
-              name='categories'
-              control={control}
-              defaultValue={[]}
-              render={({ field }) => (
-                <FormControl sx={FCWidth}>
-                  <InputLabel id='category'>Categories</InputLabel>
-                  <Select
-                    {...field}
-                    labelId='category'
-                    label='category'
-                    multiple
-                    defaultValue={[]}
-                  >
-                    {options.map((option: any, index) => (
-                      <MenuItem value={option.value} key={index}>
-                        {option.value}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            />
-
-            <br />
-
-            <Controller
-              name='image'
-              control={control}
-              defaultValue=''
-              render={({ field }) => (
-                <Button variant='contained' component='label' color='primary'>
-                  {' '}
-                  <Icon.Add /> Upload an image.
-                  <TextField
-                    {...field}
-                    type='file'
-                    variant='outlined'
-                    error={!!errors.createdAt}
-                    helperText={
-                      errors.createdAt ? 'This field is required.' : ''
-                    }
-                    fullWidth
-                    margin='dense'
-                    hidden
-                  />
-                </Button>
-              )}
-            />
-            <br />
-            <FormControl>
-              <FormControlLabel
-                control={<Checkbox value='remember' color='primary' />}
-                label={`I'm not a robot.`}
-              />
-            </FormControl>
-
-            <Button
-              type='submit'
-              fullWidth
-              variant='contained'
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Create
-            </Button>
-
-            <Grid container>
-              <Grid item xs>
-                <Link href='#' variant='body2'>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href='#' variant='body2'>
-                  {"Don't have an account? Sign Up"}
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
-        </Box>
-      </Container>
-    </ThemeProvider>
+      {displayAuthErr && (
+        <AlertMessage heading='Warning' text={displayErrorMessage} />
+      )}
+    </div>
   );
 };
 

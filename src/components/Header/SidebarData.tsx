@@ -1,4 +1,6 @@
-import * as Icon from '@mui/icons-material';
+import { BsHouseFill, BsFillPeopleFill } from 'react-icons/bs';
+import { MdOutlineAccountCircle } from 'react-icons/md';
+import { AiOutlineMessage, AiOutlineQuestionCircle } from 'react-icons/ai';
 
 interface ISidebarData {
   title: string;
@@ -7,35 +9,35 @@ interface ISidebarData {
   cName: string;
 }
 
-export const SidebarData = [
+export const SidebarData: ISidebarData[] = [
   {
     title: 'Home',
     path: '/',
-    icon: <Icon.House style={{ color: 'green' }} />,
+    icon: <BsHouseFill style={{ color: 'green' }} />,
     cName: 'nav-text',
   },
   {
     title: 'My Page',
     path: '/my-page',
-    icon: <Icon.AccountCircle />,
+    icon: <MdOutlineAccountCircle />,
     cName: 'nav-text',
   },
   {
     title: 'Friends',
     path: '/friends',
-    icon: <Icon.People />,
+    icon: <BsFillPeopleFill />,
     cName: 'nav-text',
   },
   {
     title: 'Messages',
     path: '/messages',
-    icon: <Icon.Message />,
+    icon: <AiOutlineMessage />,
     cName: 'nav-text',
   },
   {
     title: 'Support',
     path: '/support',
-    icon: <Icon.HelpOutline />,
+    icon: <AiOutlineQuestionCircle />,
     cName: 'nav-text',
   },
 ];
